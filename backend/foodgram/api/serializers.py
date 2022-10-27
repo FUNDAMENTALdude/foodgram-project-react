@@ -13,6 +13,7 @@ from foodgram.settings import EXC_NAME
 import base64
 from django.core.files.base import ContentFile
 
+
 class Base64ImageField(serializers.ImageField):
     def to_internal_value(self, data):
         if isinstance(data, str) and data.startswith('data:image'):
@@ -187,16 +188,19 @@ class RecipeSerializerCreate(serializers.ModelSerializer):
 
     def add_ingredients(self, ingredients, recipe):
 
+        bulk_list = []
         for ingredient in ingredients:
             id = ingredient['id']
             amount = ingredient['amount']
             ingredient_obj = get_object_or_404(Ingredient, id=id)
-            IngredientRecipe.objects.create(
-                recipe=recipe,
-                ingredient=ingredient_obj,
-                amount=amount
+            bulk_list.append(
+                IngredientRecipe(
+                    recipe=recipe,
+                    amount=amount,
+                    ingredient=ingredient_obj,
+                )
             )
-
+        IngredientRecipe.objects.bulk_create(bulk_list)
 
     def create(self, validated_data):
 

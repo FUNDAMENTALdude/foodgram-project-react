@@ -44,7 +44,6 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 
 class CustomUserViewSet(UserViewSet):
     pagination_class = RecipePagination
-    pass
 
 
 class APIFollow(APIView):
@@ -62,7 +61,7 @@ class APIFollow(APIView):
     def delete(self, request, id):
         user = request.user
         author = get_object_or_404(User, id=id)
-        follow = get_object_or_404(Follow, user=user, author=author, )
+        follow = Follow.objects.filter(user=user, author=author)
         follow.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -113,7 +112,7 @@ class APIFavorite(APIView):
     def delete(self, request, id):
         user = request.user
         recipe = get_object_or_404(Recipe, id=id)
-        favorite = get_object_or_404(Favorite, user=user, recipe=recipe,)
+        favorite = Favorite.objects.filter(user=user, recipe=recipe)
         favorite.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -132,8 +131,8 @@ class APIShoppingCart(APIView):
     def delete(self, request, id):
         user = request.user
         recipe = get_object_or_404(Recipe, id=id)
-        favorite = get_object_or_404(ShoppingCart, user=user, recipe=recipe, )
-        favorite.delete()
+        shopping_cart = ShoppingCart.objects.filter(user=user, recipe=recipe)
+        shopping_cart.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
