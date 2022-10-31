@@ -12,7 +12,6 @@ services:
 
   backend:
     image: fundamentaldude/foodgram:latest
-    restart: always
     volumes:
       - static_value:/app/static/
       - media_value:/app/media/
@@ -20,12 +19,11 @@ services:
       - db
     env_file:
       - ./.env
+    restart: always
 
 
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+    image: fundamentaldude/frontend:latest
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
