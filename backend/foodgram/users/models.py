@@ -7,7 +7,7 @@ User = get_user_model()
 
 class Follow(models.Model):
 
-    user= models.ForeignKey(
+    user = models.ForeignKey(
         User,
         blank=False,
         null=False,
