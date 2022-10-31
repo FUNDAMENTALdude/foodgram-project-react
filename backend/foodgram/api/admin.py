@@ -1,7 +1,6 @@
 from django.contrib import admin
-from recipes.models import Tag, Ingredient, Recipe, User, Favorite, ShoppingCart
+from recipes.models import Tag, Ingredient, Favorite, ShoppingCart
 from users.models import Follow
-
 
 
 class TagAdmin(admin.ModelAdmin):
@@ -33,6 +32,7 @@ class RecipesAdmin(admin.ModelAdmin):
         if Favorite.objects.filter(recipe=obj).exists():
             return Favorite.objects.filter(recipe=obj).count()
         return 0
+
 
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
