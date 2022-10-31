@@ -37,19 +37,14 @@ docker-compose up -d
 
 Выполнить миграции:
 ```
-docker-compose exec web python manage.py migrate
+docker-compose exec backend python manage.py migrate
 ```
 
 Собрать статику:
 ```
-docker-compose exec web python manage.py collectstatic --no-input 
+docker-compose exec backend python manage.py collectstatic --no-input 
 ```
 
 
-### Проект работает локально по адресу(не запущен на удаленном сервере)
-http://localhost:3000/
-
-### Загрузить данные в бд
-```
-docker-compose exec web python manage.py loaddata data.json
-```
+### Проект работает по адресу(на удаленном сервере)
+http://51.250.90.30/
