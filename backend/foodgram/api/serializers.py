@@ -1,4 +1,3 @@
-from webbrowser import get
 from rest_framework import serializers
 from djoser.serializers import UserSerializer, UserCreateSerializer
 
@@ -30,12 +29,13 @@ class UserSerializerGet(UserSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'is_subscribed')
+        fields = ('id', 'username', 'first_name',
+                  'last_name', 'email', 'is_subscribed')
 
     def validate(self, data):
         if 'username' not in data:
             return data
-    
+
     def get_is_subscribed(self, obj):
         user = self.context['request'].user
         return user.is_authenticated and Follow.objects.filter(
@@ -47,7 +47,8 @@ class RegistrationSerializer(UserCreateSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'password')
+        fields = ('id', 'username', 'first_name',
+                  'last_name', 'email', 'password')
         extra_kwargs = {
             'username': {'required': True},
             'first_name': {'required': True},
@@ -66,7 +67,7 @@ class RegistrationSerializer(UserCreateSerializer):
 class FollowSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model=Follow
+        model = Follow
         fields = ('user', 'author')
 
     def validate(self, data):
@@ -165,9 +166,7 @@ class RecipeSerializerGet(serializers.ModelSerializer):
         user = self.context['request'].user
         return user.is_authenticated and ShoppingCart.objects.filter(
             user=user, recipe=obj
-        ).exists()
-        
-
+        ).exists()        
 
 
 class RecipeSerializerCreate(serializers.ModelSerializer):

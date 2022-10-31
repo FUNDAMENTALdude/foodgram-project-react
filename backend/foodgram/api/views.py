@@ -1,31 +1,26 @@
-from re import S, U
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from django.db.models import Sum
 from django_filters.rest_framework import DjangoFilterBackend
 
-from rest_framework import viewsets, status, mixins, permissions
+from rest_framework import viewsets, status, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes, action
+from rest_framework.decorators import api_view, permission_classes
 
-
-from foodgram.settings import EXC_NAME
 from users.models import User, Follow
-from recipes.models import IngredientRecipe, Recipe, Tag, Ingredient, Favorite, ShoppingCart
+from recipes.models import (IngredientRecipe, Recipe, Tag,
+                            Ingredient, Favorite, ShoppingCart)
 
 from .filters import IngredientsSearchFilter, RecipeFilter
 from .pagination import RecipePagination
 from .permissions import IsAuthorAdminOrReadOnly
-from .serializers import (ShoppingCartSerializer, TagSerializer, FavoriteRecipesSerializer,
+from .serializers import (ShoppingCartSerializer, TagSerializer,
                           RecipeSerializerGet, RecipeSerializerCreate,
                           IngredientSerializer, FollowSerializer,
                           SubscriptionsSerializer, FavoriteSerializer)
 
 from djoser.views import UserViewSet
-
-
-
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
@@ -40,6 +35,7 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = IngredientSerializer
     permission_classes = [permissions.AllowAny]
     pagination_class = None
+    filter_backends = [IngredientsSearchFilter]
 
 
 class CustomUserViewSet(UserViewSet):
@@ -104,7 +100,8 @@ class APIFavorite(APIView):
 
     def post(self, request, id):
         data = {'recipe': id, 'user': request.user.id}
-        serializer = FavoriteSerializer(data=data, context={'request': request})
+        serializer = FavoriteSerializer(data=data,
+                                        context={'request': request})
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -123,7 +120,8 @@ class APIShoppingCart(APIView):
 
     def post(self, request, id):
         data = {'recipe': id, 'user': request.user.id}
-        serializer = ShoppingCartSerializer(data=data, context={'request': request})
+        serializer = ShoppingCartSerializer(data=data,
+                                            context={'request': request})
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -140,7 +138,7 @@ class APIShoppingCart(APIView):
 @permission_classes([permissions.IsAuthenticated])
 def download_shopping_cart(request):
 
-    user=request.user
+    user = request.user
     ingredients = IngredientRecipe.objects.filter(
         recipe__shopping_cart__user=user
     )
@@ -160,6 +158,7 @@ def download_shopping_cart(request):
     ])
 
     response = FileResponse(shopping_cart, content_type='text')
-    response['Content-Disposition'] = ('attachment; filename=shopping_cart.txt')
+    response['Content-Disposition'] = ('attachment;'
+                                       'filename=shopping_cart.txt')
 
     return response
