@@ -17,7 +17,7 @@ class Base64ImageField(serializers.ImageField):
     def to_internal_value(self, data):
         if isinstance(data, str) and data.startswith('data:image'):
             format, imgstr = data.split(';base64,')
-            ext = format.split('/')[-1]  
+            ext = format.split('/')[-1]
             data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
 
         return super().to_internal_value(data)
@@ -111,7 +111,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class IngredientSerializer(serializers.ModelSerializer):
- 
+
     class Meta:
         model = Ingredient
         fields = ('id', 'name', 'measurement_unit')
@@ -152,10 +152,10 @@ class RecipeSerializerGet(serializers.ModelSerializer):
     class Meta:
 
         model = Recipe
-        fields = ('id', 'author', 'name', 'image', 'text', 
+        fields = ('id', 'author', 'name', 'image', 'text',
                   'ingredients', 'tags', 'cooking_time',
                   'is_favorited', 'is_in_shopping_cart')
-        
+
     def get_is_favorited(self, obj):
         user = self.context['request'].user
         return user.is_authenticated and Favorite.objects.filter(
@@ -166,7 +166,7 @@ class RecipeSerializerGet(serializers.ModelSerializer):
         user = self.context['request'].user
         return user.is_authenticated and ShoppingCart.objects.filter(
             user=user, recipe=obj
-        ).exists()        
+        ).exists()
 
 
 class RecipeSerializerCreate(serializers.ModelSerializer):
@@ -181,7 +181,7 @@ class RecipeSerializerCreate(serializers.ModelSerializer):
     class Meta:
 
         model = Recipe
-        fields = ('id', 'author', 'name', 'image', 'text', 
+        fields = ('id', 'author', 'name', 'image', 'text',
                   'ingredients', 'tags', 'cooking_time')
         read_only_fields = ('author',)
 

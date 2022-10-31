@@ -2,8 +2,6 @@ from django.db import models
 from django.db.models import UniqueConstraint
 from users.models import User
 from django.core.validators import MinValueValidator, RegexValidator
-from foodgram.settings import MINIMUM_AMOUNT_OF_INGREDIENT
-from foodgram.settings import MINIMUM_COOKING_TIME
 
 
 class Tag(models.Model):
@@ -33,7 +31,7 @@ class Tag(models.Model):
     )
 
     class Meta:
-        ordering = ['name',]
+        ordering = ['name']
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
 
@@ -52,7 +50,7 @@ class Ingredient(models.Model):
     )
 
     class Meta:
-        ordering = ['name',]
+        ordering = ['name']
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
         constraints = [
@@ -64,6 +62,7 @@ class Ingredient(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Recipe(models.Model):
 
@@ -84,7 +83,7 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(
         Ingredient,
         blank=False,
-        related_name='recipes',                 
+        related_name='recipes',
         verbose_name='Ингредиенты',
         through='IngredientRecipe'
     )
@@ -120,7 +119,7 @@ class Recipe(models.Model):
 class IngredientRecipe(models.Model):
 
     ingredient = models.ForeignKey(
-        Ingredient,                     
+        Ingredient,
         related_name='ingredient',
         on_delete=models.PROTECT
     )
@@ -146,6 +145,7 @@ class IngredientRecipe(models.Model):
             f'{self.recipe}  {self.ingredient},'
             f'количество = {self.amount}'
         )
+
 
 class Favorite(models.Model):
 
