@@ -47,4 +47,4 @@ docker-compose exec backend python manage.py collectstatic --no-input
 
 
 ### Проект работает по адресу(на удаленном сервере)
-http://51.250.90.30/
+http://51.250.67.136/
