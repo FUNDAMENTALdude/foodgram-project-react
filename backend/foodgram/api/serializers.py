@@ -144,7 +144,7 @@ class RecipeSerializerGet(serializers.ModelSerializer):
 
     image = Base64ImageField()
     tags = TagSerializer(many=True, read_only=True)
-    ingredients = IngredientSerializer(many=True, read_only=True)
+    ingredients = IngredientRecipeSerializerGet(many=True, read_only=True)
     author = UserSerializerGet(read_only=True)
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()

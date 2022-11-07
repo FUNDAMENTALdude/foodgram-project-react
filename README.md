@@ -32,12 +32,13 @@ git clone https://github.com/FUNDAMENTALdude/foodgram-project-react.git
 Собрать контейнер
 ```
 cd infra
-docker-compose up -d
+sudo docker-compose up -d --build
 ```
 
 Выполнить миграции:
 ```
-docker-compose exec backend python manage.py migrate
+sudo docker-compose exec backend python manage.py migrate
+
 ```
 
 Собрать статику:
@@ -47,4 +48,4 @@ docker-compose exec backend python manage.py collectstatic --no-input
 
 
 ### Проект работает по адресу(на удаленном сервере)
-http://51.250.67.136/
+http://51.250.90.30/

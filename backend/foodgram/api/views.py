@@ -36,6 +36,7 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.AllowAny]
     pagination_class = None
     filter_backends = [IngredientsSearchFilter]
+    search_fields = ['^name']
 
 
 class CustomUserViewSet(UserViewSet):
